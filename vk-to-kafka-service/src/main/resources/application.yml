@@ -104,7 +104,3 @@ vk-to-kafka-service:
     - photos
     - music
     - musica
-    - musician
-
-  welcome-message:
-    Ни пуха, ни пера

@@ -20,14 +20,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import ru.suspitsyn.microservises.vk.to.kafka.service.config.VkToKafkaConfigurationData;
-import ru.suspitsyn.microservises.vk.to.kafka.service.config.VkToKafkaSecretKeys;
+import org.springframework.context.annotation.ComponentScan;
+import ru.suspitsyn.microservices.config.VkToKafkaConfigurationData;
+import ru.suspitsyn.microservices.config.VkToKafkaSecretKeys;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
 @SpringBootApplication
+@ComponentScan(basePackages = "ru.suspitsyn.microservices")
 public class VkToKafkaServiceApplication implements CommandLineRunner {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(VkToKafkaServiceApplication.class);
@@ -61,13 +63,11 @@ public class VkToKafkaServiceApplication implements CommandLineRunner {
 
         StreamingGetRulesResponse response = streamingClient.rules().get(actor).execute();
 
-        System.out.println(Arrays.toString(response.getRules().toArray()));
-
         deleteAndCreateTags(response);
 
         response = streamingClient.rules().get(actor).execute();
 
-        System.out.println(Arrays.toString(response.getRules().toArray()));
+       LOGGER.info("Начало работы Streaming API VK {}", Arrays.toString(response.getRules().toArray()));
 
     }
 
@@ -109,8 +109,6 @@ public class VkToKafkaServiceApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        LOGGER.info(vkToKafkaConfigurationData.getWelcomeMessage());
-        LOGGER.info(Arrays.toString(vkToKafkaConfigurationData.getVkProgrammingKeywords().toArray()));
 
         streamingClient.stream().get(actor, new StreamingEventHandler() {
             @Override

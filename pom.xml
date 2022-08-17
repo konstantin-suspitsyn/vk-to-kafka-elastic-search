@@ -4,7 +4,9 @@
 	<modelVersion>4.0.0</modelVersion>
 	<modules>
 		<module>vk-to-kafka-service</module>
-	</modules>
+        <module>app-config-data</module>
+        <module>kafka</module>
+    </modules>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
@@ -24,6 +26,7 @@
 		<com.vk.api.version>1.0.14</com.vk.api.version>
 		<org.projectlombok.version>1.18.24</org.projectlombok.version>
 		<slf4j-jdk14.version>1.7.22</slf4j-jdk14.version>
+		<app-config-data.version>0.0.1-SNAPSHOT</app-config-data.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -60,6 +63,11 @@
 				<version>${slf4j-jdk14.version}</version>
 			</dependency>
 
+			<dependency>
+				<groupId>ru.suspitsyn.microservises</groupId>
+				<artifactId>app-config-data</artifactId>
+				<version>${app-config-data.version}</version>
+			</dependency>
 
 		</dependencies>
 	</dependencyManagement>

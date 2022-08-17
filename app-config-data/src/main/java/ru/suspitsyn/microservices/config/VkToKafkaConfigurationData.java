@@ -1,4 +1,4 @@
-package ru.suspitsyn.microservises.vk.to.kafka.service.config;
+package ru.suspitsyn.microservices.config;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -13,5 +13,4 @@ import java.util.List;
 @ConfigurationProperties(prefix = "vk-to-kafka-service")
 public class VkToKafkaConfigurationData {
     private List<String> vkProgrammingKeywords;
-    private String welcomeMessage;
 }
