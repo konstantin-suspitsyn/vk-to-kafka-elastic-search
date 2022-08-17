@@ -1,0 +1,12 @@
+{"namespace": "ru.suspitsyn.microservices.kafka.avro.model",
+ "type": "record",
+ "name": "VKStream",
+ "fields": [
+     {"name": "eventType", "type": "string"},
+     {"name": "postOwnerId",  "type": ["int", "long"]},
+     {"name": "postId", "type": ["string", "long"]},
+     {"name": "eventUrl", "type": ["string", "null"]},
+     {"name": "text", "type": ["string", "null"]},
+     {"name": "creationTime", "type": ["long", "null"]}
+ ]
+}
