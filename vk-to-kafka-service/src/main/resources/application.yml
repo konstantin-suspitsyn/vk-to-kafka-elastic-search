@@ -104,3 +104,20 @@ vk-to-kafka-service:
     - photos
     - music
     - musica
+
+retry-config:
+  initial-interval-ms: 1000
+  max-interval-ms: 10000
+  multiplier: 2.0
+  max-attempts: 3
+  sleep-time-ms: 2000
+
+kafka-config:
+  bootstrap-servers: localhost:9092, localhost:19092, localhost:29092
+  schema-registry-url-key: schema.registry.url
+  schema-registry-url: http://localhost:8081
+  topic-name: vk_stream
+  topic-name-to-create:
+    - vk_stream
+  num-of-partitions: 3
+  replication-factor: 3
