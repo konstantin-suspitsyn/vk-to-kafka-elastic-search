@@ -1,4 +1,4 @@
-package ru.suspitsyn.microservises.vk.to.kafka.service;
+package ru.suspitsyn.microservices.vk.to.kafka.service;
 
 import com.vk.api.sdk.client.TransportClient;
 import com.vk.api.sdk.client.VkApiClient;
@@ -23,6 +23,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import ru.suspitsyn.microservices.config.VkToKafkaConfigurationData;
 import ru.suspitsyn.microservices.config.VkToKafkaSecretKeys;
+import ru.suspitsyn.microservices.kafka.avro.model.VKStream;
+import ru.suspitsyn.microservices.kafka.producer.service.KafkaProducer;
+import ru.suspitsyn.microservices.vk.to.kafka.service.init.StreamInitializer;
+import ru.suspitsyn.microservices.vk.to.kafka.service.transformer.VKToAvroTransformer;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -48,9 +52,19 @@ public class VkToKafkaServiceApplication implements CommandLineRunner {
     private final GetServerUrlResponse getServerUrlResponse;
     private final StreamingActor actor;
 
-    public VkToKafkaServiceApplication(VkToKafkaConfigurationData vkToKafkaConfigurationData, VkToKafkaSecretKeys vkToKafkaSecretKeys) throws ClientException, ApiException, StreamingClientException, StreamingApiException {
+    private final StreamInitializer kafkaStreamInitializer;
+
+    private final KafkaProducer<Long, VKStream> kafkaProducer;
+
+    private final VKToAvroTransformer vkToAvroTransformer;
+
+
+    public VkToKafkaServiceApplication(VkToKafkaConfigurationData vkToKafkaConfigurationData, VkToKafkaSecretKeys vkToKafkaSecretKeys, StreamInitializer kafkaStreamInitializer, KafkaProducer<Long, VKStream> kafkaProducer, VKToAvroTransformer vkToAvroTransformer) throws ClientException, ApiException, StreamingClientException, StreamingApiException {
         this.vkToKafkaConfigurationData = vkToKafkaConfigurationData;
         this.vkToKafkaSecretKeys = vkToKafkaSecretKeys;
+        this.kafkaStreamInitializer = kafkaStreamInitializer;
+        this.kafkaProducer = kafkaProducer;
+        this.vkToAvroTransformer = vkToAvroTransformer;
 
         appId = this.vkToKafkaSecretKeys.getAPP_ID();
         accessToken = this.vkToKafkaSecretKeys.getSECRET_KEY();
@@ -109,11 +123,20 @@ public class VkToKafkaServiceApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-
+        kafkaStreamInitializer.init();
         streamingClient.stream().get(actor, new StreamingEventHandler() {
             @Override
             public void handle(StreamingCallbackMessage message) {
                 System.out.println(message);
+
+                VKStream vkStream = vkToAvroTransformer.getVkAvroModelFromStatus(message.getEvent().getEventType().getValue(),
+                        message.getEvent().getAuthor().getId().longValue(),
+                        message.getEvent().getEventId().getPostId().longValue(),
+                        message.getEvent().getEventUrl(),
+                        message.getEvent().getText(),
+                        message.getEvent().getCreationTime().longValue());
+
+                kafkaProducer.send("vk_stream", message.getEvent().getAuthor().getId().longValue(), vkStream);
             }
         }).execute();
     }

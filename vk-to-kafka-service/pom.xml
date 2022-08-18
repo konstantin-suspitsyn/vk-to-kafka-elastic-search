@@ -42,6 +42,18 @@
             <groupId>ru.suspitsyn.microservises</groupId>
             <artifactId>app-config-data</artifactId>
         </dependency>
+        <dependency>
+            <groupId>ru.suspitsyn.microservises</groupId>
+            <artifactId>kafka-admin</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ru.suspitsyn.microservises</groupId>
+            <artifactId>kafka-producer</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ru.suspitsyn.microservises</groupId>
+            <artifactId>kafka-model</artifactId>
+        </dependency>
 
     </dependencies>
 
