@@ -121,6 +121,14 @@ public class VkToKafkaServiceApplication implements CommandLineRunner {
         SpringApplication.run(VkToKafkaServiceApplication.class, args);
     }
 
+    private String returnNotNull(String text) {
+        if (text == null) {
+            return " ";
+        } else {
+            return text;
+        }
+    }
+
     @Override
     public void run(String... args) throws Exception {
         kafkaStreamInitializer.init();
@@ -129,11 +137,12 @@ public class VkToKafkaServiceApplication implements CommandLineRunner {
             public void handle(StreamingCallbackMessage message) {
                 System.out.println(message);
 
-                VKStream vkStream = vkToAvroTransformer.getVkAvroModelFromStatus(message.getEvent().getEventType().getValue(),
+                VKStream vkStream = vkToAvroTransformer.getVkAvroModelFromStatus(
+                        returnNotNull(message.getEvent().getEventType().getValue()),
                         message.getEvent().getAuthor().getId().longValue(),
                         message.getEvent().getEventId().getPostId().longValue(),
-                        message.getEvent().getEventUrl(),
-                        message.getEvent().getText(),
+                        returnNotNull(message.getEvent().getEventUrl()),
+                        returnNotNull(message.getEvent().getText()),
                         message.getEvent().getCreationTime().longValue());
 
                 kafkaProducer.send("vk_stream", message.getEvent().getAuthor().getId().longValue(), vkStream);
