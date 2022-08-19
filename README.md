@@ -11,7 +11,7 @@
 1. В папке config создать файл VkToKafkaSecretKeys
 
 ```
-package ru.suspitsyn.microservises.vk.to.kafka.service.config;
+package ru.suspitsyn.microservices.vk.to.kafka.service.config;
 
 import lombok.Getter;
 import lombok.Setter;

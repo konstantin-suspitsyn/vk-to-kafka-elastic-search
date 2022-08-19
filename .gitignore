@@ -32,4 +32,4 @@ build/
 ### VS Code ###
 .vscode/
 
-/vk-to-kafka-service/src/main/java/ru/suspitsyn/microservises/vk/to/kafka/service/config/VkToKafkaSecretKeys.java
+/vk-to-kafka-service/src/main/java/ru/suspitsyn/microservices/vk/to/kafka/service/config/VkToKafkaSecretKeys.java

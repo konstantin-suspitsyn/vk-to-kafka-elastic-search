@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: vk-to-kafka-service
+  profile:
+    active: vk_to_kafka
+  cloud:
+    config:
+      name: vk-to-kafka-service,config-client
+      uri: http://localhost:8888

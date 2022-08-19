@@ -132,3 +132,13 @@ kafka-producer-config:
   linger-ms: 5
   request-timeout-ms: 60000
   retry-count: 5
+
+spring:
+  application:
+    name: vk-to-kafka-service
+  profile:
+    active: vk_to_kafka
+  cloud:
+    config:
+      name: vk-to-kafka-service,config-client
+      uri: http://localhost:8888
